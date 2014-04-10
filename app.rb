@@ -13,10 +13,13 @@ post '/receive_message' do
     puts "#{msisdn} Provided bad, going to guess which line they ment"
     tube_line = guess_tube_line(params[:Body])
     if tube_line
+      puts 'Guessed the station'
       message = create_message(tube_line)
       send_message(msisdn, message)
     else
+      puts 'Didnt guess it'
       tube_line = dlr_and_central(params[:Body])
+      puts tube_line
       message = create_message(tube_line)
       send_message(msisdn, message)
     end
@@ -45,18 +48,20 @@ def guess_tube_line(line)
     find_line('Victoria')
   when 'W', 'w'
     find_line('Waterloo & City')
+  when 'H', 'h'
+    find_line('Hammersmith and City')
   end
 end
 
 def dlr_and_central(line)
   case line
+  when 'dis', 'Dis', 'district'
+    find_line('District')
   when 'DRL', 'dlr', 'Dlr'
     find_line('DLR')
-  when 'District', 'Disrtict', 'Dis', 'dis', 'district'
-    find_line('Disrict')
   when 'circle', 'cirlec', 'cir'
     find_line('Circle')
-  when 'Central', 'central', 'cen'
+  when  'central', 'cen'
     find_line('Central')
   end
 end

@@ -1,6 +1,8 @@
 class TwillioClient
 
   def send_message(msisdn, message)
+    # puts msisdn
+    # puts message
     twillio.account.messages.create(
       from: from_number,
       to: msisdn,
