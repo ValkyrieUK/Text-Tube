@@ -13,11 +13,11 @@ post '/receive_message' do
     puts "#{msisdn} Provided bad, going to guess which line they ment"
     tube_line = guess_tube_line(params[:Body])
     if tube_line
-      puts 'Guessed the station'
+      puts "Guessed the station for #{msisdn}"
       message = create_message(tube_line)
       send_message(msisdn, message)
     else
-      puts 'Didnt guess it'
+      puts "Still looking #{msisdn}"
       tube_line = dlr_and_central(params[:Body])
       puts tube_line
       message = create_message(tube_line)
@@ -67,6 +67,7 @@ def dlr_and_central(line)
 end
 
 def xml_to_json
+  puts 'API request to TFL'
   xml = HTTParty.get('http://cloud.tfl.gov.uk/TrackerNet/LineStatus')
   Crack::XML.parse(xml.body)['ArrayOfLineStatus']['LineStatus']
 end
@@ -80,11 +81,14 @@ def twillio
 end
 
 def create_message(tube_line)
+  puts 'Creating the message'
   name = tube_line['Line']['Name']
   status = tube_line['Status']['Description']
   if status == 'Good Service'
+    puts 'Service is good, no need for description'
     '🚈' + '👍' + name +': '+ status
   else
+    puts 'Service is bad, creating a description'
     description = tube_line['StatusDetails']
     '🚈' + '👎' + name + ': ' + status + ': ' + description
   end

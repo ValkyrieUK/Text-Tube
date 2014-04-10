@@ -1,13 +1,13 @@
 class TwillioClient
 
   def send_message(msisdn, message)
-    # puts msisdn
-    # puts message
+    puts "Sending a #{message} to #{msisdn}"
     twillio.account.messages.create(
       from: from_number,
       to: msisdn,
       body: message
     )
+    puts "Message send to #{msisdn}"
   end
 
   private
