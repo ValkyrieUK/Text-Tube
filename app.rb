@@ -78,6 +78,6 @@ def create_message(tube_line)
     '🚈' + '👍' + name +': '+ status
   else
     description = tube_line['StatusDetails']
-    '🚈' + '👎' + name +': '+ status + ': ' description
+    '🚈' + '👎' + name + ': ' + status + ': ' + description
   end
 end
