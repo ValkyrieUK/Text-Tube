@@ -3,17 +3,20 @@ require 'sinatra'
 
 post '/receive_message' do
   msisdn = params[:From]
+  puts "Okay, Got a Text from #{msisdn}!!"
   tube_line = find_line(params[:Body])
   if tube_line
+    puts "#{msisdn} Provided nice params"
     message = create_message(tube_line)
     send_message(msisdn, message)
   else
+    puts "#{msisdn} Provided bad, going to guess which line they ment"
     tube_line = guess_tube_line(params[:Body])
     if tube_line
       message = create_message(tube_line)
       send_message(msisdn, message)
     else
-      tube_line = dlr_and_central(line)
+      tube_line = dlr_and_central(params[:Body])
       message = create_message(tube_line)
       send_message(msisdn, message)
     end
