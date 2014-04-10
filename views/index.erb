@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fresh Sinatra</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+  </head>
+  <body>
+    <% @something.each do |line| %>
+      <p><%= line['Line']['Name'] %></p>
+      <p><%= line['Status']['Description'] %></p>
+    <% end %>
+  </body>
+</html>
